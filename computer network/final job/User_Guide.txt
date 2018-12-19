@@ -1,0 +1,109 @@
+Welcome to use the virtual chatRoom!
+
+                                   Introduction to these files
+
+As you can see, I have attach the source code's file named "Source code", the application named
+" Virtual_Chat_Room", and a ".png" file to illustrate the architecture of this application.
+
+The Source code is a package of ".java" files and the application is a ".jar" files.
+
+
+                                   How to run this Application
+
+This Application is a ".jar" file, which requires a JRE environment to run.
+
+Let's assume you have installed the JRE environment in your computer, then just follow the these steps:
+
+1. Open the Virtual_Char_Room.jar file. Please make sure two of your friends also open it in the same time.
+
+2. Then you can see 
+   
+   three input text fields:
+   
+       Nick Name:  This is the nick name that you will use in the virtual chat room!
+   
+       Destination 1:  This represents the IP address of one of your partners.
+
+       Destination 2: This represets the IP address of another parter of yours.
+
+   Two Buttons:
+
+       Wait: This is used for the waiters to wait untill they are connected to the initializer.
+   
+       Initialize Connection: This is used for the initializer to connected to other waiters.
+
+   
+    Because this application is for three people chatting with each other, there are two types of users.
+
+    One is "waiter", because they wait to be connected.
+
+    another is "initializer", because it send the connection request to others.
+
+3. If you choose to be waiter, just input your nick name in the corresponding text field. 
+   And click wait button.
+
+   If you choose to be initializer, please input your nick name and your friends' IP address
+   in the correspondingtext fields. 
+ 
+   Notice:  There are total two waiter and one initializer. Please make sure that the two waiters press
+            wait button before the initializer press the initialize button
+
+4. If you are all connected to each other successfully, then you can see:
+
+   Connected status: These fields show the connected status of the users.
+
+   Output field:  This is the bigges field in the second page. It is used to display the communicating
+                  information.
+   input field:   This is used for inputting the communicating information.
+
+   send button:   when you finishing inputting, just press send button and the information will be displayed
+                  in the output field.
+
+   Quit:          If you want to quit the communication scenario, please press this button.
+  
+5. Just input something in the input field and start to talk with each other!
+  
+
+
+                                                                               
+                                               Some events
+                     
+The above 5 steps illustrate how to use this application. I will also show you some events in this application.
+
+If you are the waiter and you see:
+
+        A. If the other waiter's nick name disappear in the connected status fields, that means that user is off the line.
+   
+        B. If all the nick names disappear in the connected fields, that means you are off the line.
+  
+        C. If your application automatically shuts down, that is because the initializer press quit button.
+       
+        D. If you press quit button, your state will be sent to other users immedistely and your application will be closed.
+           If you close your application, but forget to press quit button, other users will know your state after a while.
+        
+        So, if you are off the line or your application is shutted down, please start this application again if you still want
+        to talk!
+
+If you are the initializer and you see:
+
+        A. If the some waiter's nick name disappear in the connected status fields, that means that user is off the line.
+        
+        B. If you press the "quit" button, your application and other users' application will be closed immediately.
+           
+           If you close your applicaion, but forget to press "quit", other users will lose connection to each other and 
+           recognize this situation after a while. 
+ 
+
+ 
+Even one waiter is lost, the initializer will still be able to talk with the other waiter! 
+
+
+That's all about it. 
+
+I hope you have a great experience with this amazing application!
+
+
+Author: Qi Zhao
+         
+
+      
