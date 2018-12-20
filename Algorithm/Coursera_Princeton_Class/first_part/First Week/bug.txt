@@ -1,0 +1,1 @@
+When the grid is already percolated, any cell that is connected to the bottom lines will be full.

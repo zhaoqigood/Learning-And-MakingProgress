@@ -1,0 +1,154 @@
+% 1. Title: BUPA liver disorders
+% 
+% 2. Source information:
+%    -- Creators: BUPA Medical Research Ltd.
+%    -- Donor: Richard S. Forsyth
+%              8 Grosvenor Avenue
+%              Mapperley Park
+%              Nottingham NG3 5DX
+%              0602-621676
+%    -- Date: 5/15/1990
+% 
+% 3. Past usage: 
+%    -- None known other than what is shown in the PC/BEAGLE User's Guide
+%       (written by Richard S. Forsyth).
+% 
+% 4. Relevant information:
+%    -- The first 5 variables are all blood tests which are thought
+%       to be sensitive to liver disorders that might arise from
+%       excessive alcohol consumption.  Each line in the bupa.data file
+%       constitutes the record of a single male individual.
+%    -- It appears that drinks>5 is some sort of a selector on this database.
+%       See the PC/BEAGLE User's Guide for more information.
+% 
+% 5. Number of instances: 100
+% 
+% 6. Number of attributes: 7 overall
+% 
+% 7. Attribute information:
+%    1. mcv	mean corpuscular volume
+%    2. alkphos	alkaline phosphotase
+%    3. sgpt	alamine aminotransferase
+%    4. sgot 	aspartate aminotransferase
+%    5. gammagt	gamma-glutamyl transpeptidase
+%    6. drinks	number of half-pint equivalents of alcoholic beverages
+%                 drunk per day
+%    7. selector  field used to split data into two sets
+% 
+% 8. Missing values: none%
+% Information about the dataset
+% CLASSTYPE: nominal
+% CLASSINDEX: last
+%
+
+@relation liver-disorders
+
+@attribute 'mcv' INTEGER
+@attribute 'alkphos' INTEGER
+@attribute 'sgpt' INTEGER
+@attribute 'sgot' INTEGER
+@attribute 'gammagt' INTEGER
+@attribute 'drinks' REAL
+@attribute 'selector' {1,2}
+
+@data
+85,92,45,27,31,0.0,1
+85,64,59,32,23,0.0,2
+86,54,33,16,54,0.0,2
+91,78,34,24,36,0.0,2
+87,70,12,28,10,0.0,2
+98,55,13,17,17,0.0,2
+88,62,20,17,9,0.5,1
+88,67,21,11,11,0.5,1
+92,54,22,20,7,0.5,1
+90,60,25,19,5,0.5,1
+89,52,13,24,15,0.5,1
+82,62,17,17,15,0.5,1
+90,64,61,32,13,0.5,1
+86,77,25,19,18,0.5,1
+96,67,29,20,11,0.5,1
+91,78,20,31,18,0.5,1
+89,67,23,16,10,0.5,1
+89,79,17,17,16,0.5,1
+91,107,20,20,56,0.5,1
+94,116,11,33,11,0.5,1
+92,59,35,13,19,0.5,1
+93,23,35,20,20,0.5,1
+90,60,23,27,5,0.5,1
+96,68,18,19,19,0.5,1
+84,80,47,33,97,0.5,1
+92,70,24,13,26,0.5,1
+90,47,28,15,18,0.5,1
+88,66,20,21,10,0.5,1
+91,102,17,13,19,0.5,1
+87,41,31,19,16,0.5,1
+86,79,28,16,17,0.5,1
+91,57,31,23,42,0.5,1
+93,77,32,18,29,0.5,1
+88,96,28,21,40,0.5,1
+94,65,22,18,11,0.5,1
+91,72,155,68,82,0.5,2
+85,54,47,33,22,0.5,2
+79,39,14,19,9,0.5,2
+85,85,25,26,30,0.5,2
+89,63,24,20,38,0.5,2
+84,92,68,37,44,0.5,2
+89,68,26,39,42,0.5,2
+89,101,18,25,13,0.5,2
+86,84,18,14,16,0.5,2
+85,65,25,14,18,0.5,2
+88,61,19,21,13,0.5,2
+92,56,14,16,10,0.5,2
+95,50,29,25,50,0.5,2
+91,75,24,22,11,0.5,2
+83,40,29,25,38,0.5,2
+89,74,19,23,16,0.5,2
+85,64,24,22,11,0.5,2
+92,57,64,36,90,0.5,2
+94,48,11,23,43,0.5,2
+87,52,21,19,30,0.5,2
+85,65,23,29,15,0.5,2
+84,82,21,21,19,0.5,2
+88,49,20,22,19,0.5,2
+96,67,26,26,36,0.5,2
+90,63,24,24,24,0.5,2
+90,45,33,34,27,0.5,2
+90,72,14,15,18,0.5,2
+91,55,4,8,13,0.5,2
+91,52,15,22,11,0.5,2
+87,71,32,19,27,1.0,1
+89,77,26,20,19,1.0,1
+89,67,5,17,14,1.0,2
+85,51,26,24,23,1.0,2
+103,75,19,30,13,1.0,2
+90,63,16,21,14,1.0,2
+90,63,29,23,57,2.0,1
+90,67,35,19,35,2.0,1
+87,66,27,22,9,2.0,1
+90,73,34,21,22,2.0,1
+86,54,20,21,16,2.0,1
+90,80,19,14,42,2.0,1
+87,90,43,28,156,2.0,2
+96,72,28,19,30,2.0,2
+91,55,9,25,16,2.0,2
+95,78,27,25,30,2.0,2
+92,101,34,30,64,2.0,2
+89,51,41,22,48,2.0,2
+91,99,42,33,16,2.0,2
+94,58,21,18,26,2.0,2
+92,60,30,27,297,2.0,2
+94,58,21,18,26,2.0,2
+88,47,33,26,29,2.0,2
+92,65,17,25,9,2.0,2
+92,79,22,20,11,3.0,1
+84,83,20,25,7,3.0,1
+88,68,27,21,26,3.0,1
+86,48,20,20,6,3.0,1
+99,69,45,32,30,3.0,1
+88,66,23,12,15,3.0,1
+89,62,42,30,20,3.0,1
+90,51,23,17,27,3.0,1
+81,61,32,37,53,3.0,2
+89,89,23,18,104,3.0,2
+89,65,26,18,36,3.0,2
+92,75,26,26,24,3.0,2

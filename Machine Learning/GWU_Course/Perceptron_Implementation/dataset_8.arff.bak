@@ -1,0 +1,84 @@
+% 1. Title: BUPA liver disorders
+% 
+% 2. Source information:
+%    -- Creators: BUPA Medical Research Ltd.
+%    -- Donor: Richard S. Forsyth
+%              8 Grosvenor Avenue
+%              Mapperley Park
+%              Nottingham NG3 5DX
+%              0602-621676
+%    -- Date: 5/15/1990
+% 
+% 3. Past usage: 
+%    -- None known other than what is shown in the PC/BEAGLE User's Guide
+%       (written by Richard S. Forsyth).
+% 
+% 4. Relevant information:
+%    -- The first 5 variables are all blood tests which are thought
+%       to be sensitive to liver disorders that might arise from
+%       excessive alcohol consumption.  Each line in the bupa.data file
+%       constitutes the record of a single male individual.
+%    -- It appears that drinks>5 is some sort of a selector on this database.
+%       See the PC/BEAGLE User's Guide for more information.
+% 
+% 5. Number of instances: 30
+% 
+% 6. Number of attributes: 7 overall
+% 
+% 7. Attribute information:
+%    1. mcv	mean corpuscular volume
+%    2. alkphos	alkaline phosphotase
+%    3. sgpt	alamine aminotransferase
+%    4. sgot 	aspartate aminotransferase
+%    5. gammagt	gamma-glutamyl transpeptidase
+%    6. drinks	number of half-pint equivalents of alcoholic beverages
+%                 drunk per day
+%    7. selector  field used to split data into two sets
+% 
+% 8. Missing values: none%
+% Information about the dataset
+% CLASSTYPE: nominal
+% CLASSINDEX: last
+%
+
+@relation liver-disorders
+
+@attribute 'mcv' INTEGER
+@attribute 'alkphos' INTEGER
+@attribute 'sgpt' INTEGER
+@attribute 'sgot' INTEGER
+@attribute 'gammagt' INTEGER
+@attribute 'drinks' REAL
+@attribute 'selector' {1,2}
+
+@data
+89,74,19,23,16,0.5,2
+85,64,24,22,11,0.5,2
+92,57,64,36,90,0.5,2
+94,48,11,23,43,0.5,2
+87,52,21,19,30,0.5,2
+85,65,23,29,15,0.5,2
+84,82,21,21,19,0.5,2
+88,49,20,22,19,0.5,2
+96,67,26,26,36,0.5,2
+90,63,24,24,24,0.5,2
+90,45,33,34,27,0.5,2
+90,72,14,15,18,0.5,2
+91,55,4,8,13,0.5,2
+91,52,15,22,11,0.5,2
+87,71,32,19,27,1.0,1
+89,77,26,20,19,1.0,1
+89,67,5,17,14,1.0,2
+85,51,26,24,23,1.0,2
+103,75,19,30,13,1.0,2
+90,63,16,21,14,1.0,2
+90,63,29,23,57,2.0,1
+90,67,35,19,35,2.0,1
+87,66,27,22,9,2.0,1
+90,73,34,21,22,2.0,1
+86,54,20,21,16,2.0,1
+90,80,19,14,42,2.0,1
+87,90,43,28,156,2.0,2
+96,72,28,19,30,2.0,2
+91,55,9,25,16,2.0,2
+95,78,27,25,30,2.0,2

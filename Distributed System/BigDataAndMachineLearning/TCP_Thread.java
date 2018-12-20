@@ -1,0 +1,100 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+/**
+ *
+ * @author zhaoq
+ */
+public class TCP_Thread implements Runnable {
+    private String threadName;
+    private HashMap<String,String> hashTable; 
+    public TCP_Thread(String name, HashMap map) {
+       this.threadName = name;
+       hashTable = map;  
+    }
+   
+    public void run() {
+      ServerSocket serverSocket = null;
+                boolean listening = true;
+
+                try {
+                        InetAddress addr = InetAddress.getLocalHost();
+
+                        // Get IP Address
+                        byte[] ipAddr = addr.getAddress();
+
+                        // Get hostname
+                        String hostname = addr.getHostAddress();
+                        // System.out.println("Server IP = " + hostname);
+                } catch (UnknownHostException e) {}
+
+
+                try {
+                        serverSocket = new ServerSocket(10000);
+                } catch (IOException e) {
+                        System.err.println("Could not listen on port: 10000.");
+                        System.exit(-1);
+                }
+
+                System.out.println("Waiting for connections on port 10000...");
+
+                while (listening) {
+                        try {
+                                // wait for a connection
+                                Socket socket = serverSocket.accept();
+                                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                                System.out.println("Got connection from " + socket.getInetAddress());
+                                String operation = in.readLine();
+                                String key = in.readLine();
+                                String value = in.readLine();
+                                if(operation.equals("SET")){
+                                    hashTable.put(key, value);
+                                    out.println("succeed!");
+                                }
+                                else if(operation.equals("GET")){
+                                    String value_Output;
+									if(hashTable.containsKey(key)){
+										 value_Output = hashTable.get(key);
+                                         out.println(value_Output+"   "+"succeed!");
+                                    }
+									else{
+										value_Output = " Cann't find the Key ";
+										out.println(value_Output);
+									}
+                                }
+                                else if(operation.equals("STATS")){
+                                    int size = hashTable.size();
+                                    out.println(size + "    "+ "succeed!");
+                                }
+                                else{
+                                    out.println("error!");
+                                }
+                                in.close();
+                                out.close();
+                                socket.close();
+                                // start a new thread to handle the connection
+                        } catch (IOException e) {
+                                e.printStackTrace();
+                        }
+                }
+
+                try {
+                        serverSocket.close();
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+    }
+}

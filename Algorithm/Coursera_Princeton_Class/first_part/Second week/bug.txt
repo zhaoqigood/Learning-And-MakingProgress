@@ -1,0 +1,20 @@
+A B C D E F G H I J K
+NullpointerException
+    private class listIterator<Item> implements Iterator<Item>{
+        private int i=N;
+        private Item[] b=(Item[])a;
+        public boolean hasNext(){ return i>0;}
+        public Item next(){
+            if(i==0){
+                throw new NoSuchElementException();
+            }
+            int random=StdRandom.uniform(0,i);
+            Item medium=b[random];
+            b[random]=b[--i];
+            b[i]=null;
+            return medium;
+        }
+        public void remove(){
+            throw new UnsupportedOperationException();
+        }
+    }

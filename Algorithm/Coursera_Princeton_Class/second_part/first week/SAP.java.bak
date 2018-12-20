@@ -1,0 +1,333 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.Bag;
+import edu.princeton.cs.algs4.ST;
+import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+/**
+ *
+ * @author zhaoq
+ */
+public class SAP {
+    private Digraph graph;
+    public SAP(Digraph G){
+        if(G == null){
+	    throw new IllegalArgumentException();
+        }
+        graph = new Digraph(G.V());
+        for(int vertex=0;vertex<G.V();vertex++){
+            for(int vertex1:G.adj(vertex)){
+                graph.addEdge(vertex,vertex1);
+            }
+        }
+    }
+    public int length(int v, int w){
+        if( v<0 || v> (graph.V()-1) || w<0 || w>(graph.V()-1)){
+	    throw new IllegalArgumentException();
+        }
+	if( v == w){
+            return 0;
+	}
+        int vertexA = v; // utilize the code in the wordNet
+        int vertexB = w;
+        int minimumDistance = Integer.MAX_VALUE; // store the length of the path
+        int[] distance1 = new int[graph.V()];// store the distance from the vertex to v
+        int[] distance2 = new int[graph.V()]; // store the distance from the vertex to w
+        for(int i = 0; i< graph.V(); i++){
+            distance1[i] = Integer.MAX_VALUE;
+            distance2[i] = Integer.MAX_VALUE;
+        }
+        int[] distance3 = new int[graph.V()]; // store the sum of distance1 and distance2
+        // 0 represent the vertex is not connected to either A or B
+        // 1 represent the vertex is connected to A
+        // 2 represent the vertex is connected to B
+        Queue<Integer> queue1 = new Queue<Integer>();
+        Queue<Integer> queue2 = new Queue<Integer>();
+        boolean[] marked1 = new boolean[graph.V()];
+        boolean[] marked2 = new boolean[graph.V()];
+        queue1.enqueue(vertexA); // put the vertexA in the queue
+        queue2.enqueue(vertexB); // put the vertexB in the queue
+        distance1[vertexA] = 0;
+        distance2[vertexB] = 0;
+        marked1[vertexA] = true;
+        marked2[vertexB] = true;
+        while(!queue1.isEmpty()){    
+            int current = queue1.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked1[vertex]){
+                    marked1[vertex] = true;
+                    distance1[vertex] = distance1[current] + 1;
+                    queue1.enqueue(vertex);
+                }
+            }
+        }
+        while(!queue2.isEmpty()){    
+            int current = queue2.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked2[vertex]){
+                    marked2[vertex] = true;
+                    distance2[vertex] = distance2[current] + 1;
+                    queue2.enqueue(vertex);
+                }
+            }
+        }
+        for(int i = 0; i< graph.V();i++){
+            if((distance1[i]==Integer.MAX_VALUE)||(distance2[i]==Integer.MAX_VALUE)){
+                distance3[i] = Integer.MAX_VALUE;
+            }
+            else{
+                distance3[i] = distance1[i]+distance2[i];
+				if( minimumDistance > distance3[i]){
+                    minimumDistance = distance3[i];
+                }
+            }
+        }
+        if(minimumDistance != Integer.MAX_VALUE){
+            return minimumDistance;  
+        }
+        else{
+            return -1;
+        }
+    }
+    public int ancestor(int v, int w){
+        if( v<0 || v> (graph.V()-1) || w<0 || w>(graph.V()-1)){
+			throw new IllegalArgumentException();
+        }
+	if(v == w){
+            return v;
+	}
+        int vertexA = v; // utilize the code in the wordNet
+        int vertexB = w;
+        int minimumDistance = Integer.MAX_VALUE; // store the length of the path
+        int ancestor = -1;
+        int[] distance1 = new int[graph.V()];// store the distance from the vertex to v
+        int[] distance2 = new int[graph.V()]; // store the distance from the vertex to w
+        for(int i = 0; i< graph.V(); i++){
+            distance1[i] = Integer.MAX_VALUE;
+            distance2[i] = Integer.MAX_VALUE;
+        }
+        int[] distance3 = new int[graph.V()]; // store the sum of distance1 and distance2
+        // 0 represent the vertex is not connected to either A or B
+        // 1 represent the vertex is connected to A
+        // 2 represent the vertex is connected to B
+        Queue<Integer> queue1 = new Queue<Integer>();
+        Queue<Integer> queue2 = new Queue<Integer>();
+        boolean[] marked1 = new boolean[graph.V()];
+        boolean[] marked2 = new boolean[graph.V()];
+        queue1.enqueue(vertexA); // put the vertexA in the queue
+        queue2.enqueue(vertexB); // put the vertexB in the queue
+        distance1[vertexA] = 0;
+        distance2[vertexB] = 0;
+        marked1[vertexA] = true;
+        marked2[vertexB] = true;
+        while(!queue1.isEmpty()){    
+            int current = queue1.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked1[vertex]){
+                    marked1[vertex] = true;
+                    distance1[vertex] = distance1[current] + 1;
+                    queue1.enqueue(vertex);
+                }
+            }
+        }
+        while(!queue2.isEmpty()){    
+            int current = queue2.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked2[vertex]){
+                    marked2[vertex] = true;
+                    distance2[vertex] = distance2[current] + 1;
+                    queue2.enqueue(vertex);
+                }
+            }
+        }
+        for(int i = 0; i< graph.V();i++){
+            if(distance1[i]==Integer.MAX_VALUE||distance2[i]==Integer.MAX_VALUE){
+                distance3[i] = Integer.MAX_VALUE;
+            }
+            else{
+                distance3[i] = distance1[i]+distance2[i];
+                if( minimumDistance > distance3[i]){
+                minimumDistance = distance3[i];
+                ancestor = i;
+            }
+            }
+        }
+        return ancestor;
+    }
+    public int length(Iterable<Integer> v, Iterable<Integer> w){
+	if(v == null || w == null){
+	    throw new IllegalArgumentException();
+        }
+	for(int a : v){
+	    for(int b: w){
+	        if( a<0 || a> (graph.V()-1) || b<0 || b>(graph.V()-1)){
+		        throw new IllegalArgumentException();
+             }
+		    else if (a==b){
+		        return 0;
+		    }
+	    }
+	}	
+        int minimumDistance = Integer.MAX_VALUE; // store the length of the path
+        int[] distance1 = new int[graph.V()];// store the distance from the vertex to v
+        int[] distance2 = new int[graph.V()]; // store the distance from the vertex to w
+        for(int i = 0; i< graph.V(); i++){
+            distance1[i] = Integer.MAX_VALUE;
+            distance2[i] = Integer.MAX_VALUE;
+        }
+        int[] distance3 = new int[graph.V()]; // store the sum of distance1 and distance2
+        Queue<Integer> queue1 = new Queue<Integer>();
+        Queue<Integer> queue2 = new Queue<Integer>();
+        boolean[] marked1 = new boolean[graph.V()];
+        boolean[] marked2 = new boolean[graph.V()];
+        
+        // BFS from v, w.
+        for(int vertexA: v){
+            marked1[vertexA] = true;
+            queue1.enqueue(vertexA); // put the vertexA in the queue
+            distance1[vertexA] = 0;
+        }
+        for(int vertexB:w){
+            marked2[vertexB] = true;
+            queue2.enqueue(vertexB); // put the vertexB in the queue
+            distance2[vertexB] = 0;
+        }
+        while(!queue1.isEmpty()){    
+            int current = queue1.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked1[vertex]){
+                    marked1[vertex] = true;
+                    distance1[vertex] = distance1[current] + 1;
+                    queue1.enqueue(vertex);
+                }
+            }
+        }
+        while(!queue2.isEmpty()){    
+            int current = queue2.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked2[vertex]){
+                    marked2[vertex] = true;
+                    distance2[vertex] = distance2[current] + 1;
+                    queue2.enqueue(vertex);
+                }
+            }
+        }
+        for(int i = 0; i< graph.V();i++){
+            if(distance1[i]==Integer.MAX_VALUE||distance2[i]==Integer.MAX_VALUE){
+                distance3[i] = Integer.MAX_VALUE;
+            }
+            else{
+                distance3[i] = distance1[i]+distance2[i];
+                if( minimumDistance > distance3[i]){
+                    minimumDistance = distance3[i];
+                }
+            }
+        }
+        if(minimumDistance != Integer.MAX_VALUE){
+            return minimumDistance;  
+        }
+        else{
+            return -1;
+        }
+    }
+    public int ancestor(Iterable<Integer> v, Iterable<Integer> w){
+	    if(v == null || w == null){
+	        throw new IllegalArgumentException();
+         }
+	for(int a : v){
+	    for(int b: w){
+	        if( a<0 || a> (graph.V()-1) || b<0 || b>(graph.V()-1)){
+		    throw new IllegalArgumentException();
+                }
+		if (a==b){
+		    return a;
+		}
+	    }
+	}	
+        int minimumDistance = Integer.MAX_VALUE; // store the length of the path
+        int ancestor = -1;
+        int[] distance1 = new int[graph.V()];// store the distance from the vertex to v
+        int[] distance2 = new int[graph.V()]; // store the distance from the vertex to w
+        for(int i = 0; i< graph.V(); i++){
+            distance1[i] = Integer.MAX_VALUE;
+            distance2[i] = Integer.MAX_VALUE;
+        }
+        int[] distance3 = new int[graph.V()]; // store the sum of distance1 and distance2
+        Queue<Integer> queue1 = new Queue<Integer>();
+        Queue<Integer> queue2 = new Queue<Integer>();
+        boolean[] marked1 = new boolean[graph.V()];
+        boolean[] marked2 = new boolean[graph.V()];
+        
+        // BFS from v, w.
+        for(int vertexA: v){
+            marked1[vertexA] = true;
+            queue1.enqueue(vertexA); // put the vertexA in the queue
+            distance1[vertexA] = 0;
+        }
+        for(int vertexB:w){
+            marked2[vertexB] = true;
+            queue2.enqueue(vertexB); // put the vertexB in the queue
+            distance2[vertexB] = 0;
+        }
+        while(!queue1.isEmpty()){    
+            int current = queue1.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked1[vertex]){
+                    marked1[vertex] = true;
+                    distance1[vertex] = distance1[current] + 1;
+                    queue1.enqueue(vertex);
+                }
+            }
+        }
+        while(!queue2.isEmpty()){    
+            int current = queue2.dequeue();
+            for(int vertex : graph.adj(current)){
+                if(!marked2[vertex]){
+                    marked2[vertex] = true;
+                    distance2[vertex] = distance2[current] + 1;
+                    queue2.enqueue(vertex);
+                }
+            }
+        }
+        for(int i = 0; i< graph.V();i++){
+            if(distance1[i]==Integer.MAX_VALUE||distance2[i]==Integer.MAX_VALUE){
+                distance3[i] = Integer.MAX_VALUE;
+            }
+            else{
+                distance3[i] = distance1[i]+distance2[i];
+                if( minimumDistance > distance3[i]){
+                    minimumDistance = distance3[i];
+                    ancestor = i;
+                }
+            }
+        }
+        return ancestor;
+    }
+    
+    public static void main(String args[]){
+        In in = new In(args[0]);
+        String[] contents2 = in.readAllLines(); // get the contents of the in 
+		int V = 82191;
+        Digraph graph = new Digraph(V);
+        for(String line : contents2){
+            String[] numbers = line.split(",");// get the numbers of each line;
+            for(int j = 1; j < numbers.length;j++){
+                graph.addEdge(Integer.parseInt(numbers[0]),Integer.parseInt(numbers[j]));// add the edge v-w. first number is v, the remainded numbers are all w. 
+            }
+        }
+		SAP sap = new SAP(graph);
+        while(!StdIn.isEmpty()){
+            int v = StdIn.readInt();
+            int w = StdIn.readInt();
+            int length = sap.length(v,w);
+            int ancestor = sap.ancestor(v, w);
+            StdOut.printf("length = %d, ancestor = %d\n",length , ancestor);
+        }
+    }
+}

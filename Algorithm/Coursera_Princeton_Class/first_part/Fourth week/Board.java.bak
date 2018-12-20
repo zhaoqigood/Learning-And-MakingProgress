@@ -1,0 +1,216 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import edu.princeton.cs.algs4.StdRandom;
+import java.lang.Math;
+import java.util.Iterator;
+/**
+ *
+ * @author zhaoq
+ */
+public class Board{
+    private int[][] board;
+	private int length;
+    private int[][] twins;
+	private boolean born=false;
+    public Board(int[][] blocks){
+        int length1=blocks.length;
+        board=new int[length1][length1];
+        for(int i=0;i<length1;i++){
+            for(int j=0;j<length1;j++){
+                board[i][j]=blocks[i][j];
+            }
+        }
+		length=length1;
+    }
+    public int dimension(){
+        return board.length;
+    }
+    public int hamming(){
+        int count=0;
+        for(int i=0;i<length;i++){
+            for(int j=0;j<length;j++){
+                if((!(i==length-1&&j==length-1))&&board[i][j]!=(i*length+j+1)){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    public int manhattan(){
+        int count=0;
+        for(int i=0;i<length;i++){
+            for(int j=0;j<length;j++){
+                int element=board[i][j];
+                int row=(element-1)/length;
+                int column=element-row*length-1;
+                if(element!=0){
+                    count=count+Math.abs(row-i)+Math.abs(column-j);  
+                }     
+            } 
+        }
+        return count;
+    }
+    public boolean isGoal(){
+        int Hamming=this.hamming();
+        if(Hamming==0) return true;
+        else           return false;
+       
+    }
+    public Board twin(){
+		if(born){
+			  Board oneTwin=new Board(twins);
+              return oneTwin;
+		}
+        twins=new int[length][length];
+		born=true;
+        for(int i=0;i<length;i++){
+            for(int j=0;j<length;j++){
+                twins[i][j]=board[i][j];
+            }
+        }
+        while(true){
+            int i=StdRandom.uniform(0,length);
+            int j=StdRandom.uniform(0,length);
+            int m=StdRandom.uniform(0,length);
+            int n=StdRandom.uniform(0,length);
+            if((i!=m||j!=n)&&(twins[i][j]!=0&&twins[m][n]!=0)){
+                int medium=twins[i][j];
+                twins[i][j]=twins[m][n];
+                twins[m][n]=medium;
+                break;
+            }
+        }
+        Board oneTwin=new Board(twins);
+        return oneTwin;
+    }
+    public boolean equals(Object y){
+		if(this==y) return true;
+		else if(y==null) return false;
+		else if(y instanceof Board){
+            Board obj=(Board)y;
+		    String x1=this.toString();
+		    String x2=obj.toString();
+		    if(x1.equals(x2)){
+                return true;
+		    }
+		    else{
+		 	    return false;
+		    }
+		}
+		return false;
+        
+    }
+    public Iterable<Board> neighbors(){
+        return new list<Board>();
+    }
+    private Board[] boards;
+    private void initialNeighbors(){
+	    int count;
+	    int row,column;
+        boolean isJump=false;
+        for(int i=0;i<length;i++){
+            for(int j=0;j<length;j++){
+                if(board[i][j]==0){
+                    row=i;
+                    column=j;
+                    isJump=true;
+                    break;
+                }   
+            }
+            if(isJump) break;
+        }
+        if((row==0&&column==0)||(row==length-1&&column==0)||(row==0&&column==length-1)||(row==length-1&&column==length-1)){
+            count=2;
+        }
+        else if(row==0||row==length-1||column==0||column==length-1){
+            count=3;
+        }
+        else{
+            count=4;
+        }
+		int[][][] medium=new int[count][length][length];
+		boards=new Board[count];
+        for(int k=0;k<count;k++){
+            for(int i=0;i<length;i++){
+                for(int j=0;j<length;j++){
+                    medium[k][i][j]=board[i][j];
+                }
+            }
+        }
+        int t=0;
+        int mediumValue;
+        if(row-1>=0){
+            mediumValue=medium[t][row-1][column];
+            medium[t][row-1][column]=0;
+            medium[t][row][column]=mediumValue;
+            t++;
+        }
+        if(row+1<=length-1){
+            mediumValue=medium[t][row+1][column];
+            medium[t][row+1][column]=0;
+            medium[t][row][column]=mediumValue;
+            t++;
+        }
+        if(column-1>=0){
+            mediumValue=medium[t][row][column-1];
+            medium[t][row][column-1]=0;
+            medium[t][row][column]=mediumValue;
+            t++;
+        }
+        if(column+1<=length-1){
+            mediumValue=medium[t][row][column+1];
+            medium[t][row][column+1]=0;
+            medium[t][row][column]=mediumValue;
+        }
+        for(int i=0;i<count;i++){
+            boards[i]=new Board(medium[i]);
+        }  
+    }
+    private class list<Board> implements Iterable<Board>{
+        public Iterator<Board> iterator(){
+            initialNeighbors();
+			return new boardList();
+		}	
+		private class boardList implements Iterator<Board>{
+		    private int incount=boards.length-1;
+            public boolean hasNext(){
+                return incount>=0;
+            }
+            public Board next(){
+                if(incount<0) return null;
+                return (Board)boards[incount--];
+            }
+            public void remove(){
+            
+            }
+		}
+    }
+    public String toString(){
+        String x=length+"\n";
+        for(int i=0;i<length;i++){
+            for(int j=0;j<length;j++){
+				if(board[i][j]<10){
+                    x=x+" "+" "+" "+" "+" "+board[i][j];
+				}
+				else if(board[i][j]<100){
+					x=x+" "+" "+" "+" "+board[i][j];
+				}
+				else if(board[i][j]<1000){
+					x=x+" "+" "+" "+board[i][j];
+				}
+				else if(board[i][j]<10000){
+                    x=x+" "+" "+board[i][j];
+				}
+				else if(board[i][j]<100000){
+					x=x+" "+board[i][j];        
+				}
+			}
+            x=x+"\n";
+        }
+        return x;
+    }
+}

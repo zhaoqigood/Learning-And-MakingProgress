@@ -1,0 +1,88 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import java.util.Arrays;
+import java.lang.IllegalArgumentException;
+/**
+ *
+ * @author zhaoq
+ */
+public class CircularSuffixArray {
+    private Node[] sortedArray;
+    private Node[] aux;
+    private class Node implements Comparable<Node>{
+        char val;
+        int length;
+        int index;
+        Node next;
+        public int compareTo(Node that){
+            Node current1 = this;
+            Node current2 = that;
+            int length1 = this.length;
+            while(length1>0){
+                if(current1.val > current2.val){
+                    return +1;
+                }
+                if(current1.val < current2.val){
+                    return -1;
+                }
+                current1 = current1.next;
+                current2 = current2.next;
+                length1--;
+            }
+            return 0;
+        }
+        
+    }
+    private int charAt(Node[] array, int String_index , int char_index ){
+        int length = array.length;
+        int index = String_index + char_index;
+        if( index > length){
+            index = index - length;
+        }
+        return array[index].val;
+    }
+    private void sort(Node[] a){
+        int N = a.length;
+        aux = new Node[N];
+    }
+    public CircularSuffixArray(String s){
+		if( s == null){ throw new IllegalArgumentException();}
+        sortedArray = new Node[s.length()];
+        for( int i = s.length()-1 ; i >= 0 ;i--){
+            sortedArray[i] = new Node();
+            sortedArray[i].val = s.charAt(i);
+            sortedArray[i].index = i;
+            sortedArray[i].length = s.length();
+            if(i < s.length()-1){
+                sortedArray[i].next = sortedArray[i+1];
+                if(i == 0){
+                    sortedArray[s.length()-1].next = sortedArray[i];
+                }
+            }
+        }
+        Arrays.sort(sortedArray);
+        
+    }
+    public int length(){
+        return sortedArray.length;
+    }
+    public int index(int i){
+		if(i > sortedArray.length -1 || i < 0){
+	        throw new IllegalArgumentException();
+		}
+        return sortedArray[i].index;
+    }
+    public static void main(String[] args){
+        String x = "ABRACADABRA!";
+        CircularSuffixArray y = new CircularSuffixArray(x);
+        int length = y.length();
+        int index = y.index(9);
+        System.out.println(length+ "  "+ index);
+    }   
+    
+}
+

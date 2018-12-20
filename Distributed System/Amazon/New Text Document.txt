@@ -1,0 +1,11 @@
+http://wildrydes-zhaoqi.s3-website-us-east-1.amazonaws.com
+
+
+Pool Id us-east-1_UuW9q8AUB
+app client ID: 3detb84aih1c9djimt8tm8f724
+
+
+
+arn:aws:dynamodb:us-east-1:162112334806:table/Rides
+
+https://6uuwkjqo51.execute-api.us-east-1.amazonaws.com/prod

@@ -1,0 +1,5 @@
+The last number is the search number. copy theses numbers to the input text area of the simulator. And execute the program. 
+
+Notation: there is a space character behind the last number.
+
+1233 2343 3453 23422 34532 3421 3234 34 3453 6756 7656 4564 7980 5687 4313 7900 3453 1234 4554 455 5000 

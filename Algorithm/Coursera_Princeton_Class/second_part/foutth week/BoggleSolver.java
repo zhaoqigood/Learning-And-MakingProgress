@@ -1,0 +1,159 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import edu.princeton.cs.algs4.TrieST;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdOut;
+public class BoggleSolver {
+    private static int R = 26; // number of characters( A...Z)
+    private Node root;
+    private boolean[][] inPath;
+    private static class Node{
+        private Object val;
+        private Node[] next = new Node[R];
+    }
+    private void put( String key, int val){
+        root = put(root,key,val,0);
+    }
+    private Node put(Node x, String key, int val, int d){
+        if(x == null) x = new Node();
+        if(d == key.length()) { x.val = val; return x;}
+        char c = key.charAt(d);
+        x.next[c-65] = put(x.next[c-65],key,val,d+1);
+        return x;
+    }
+    public BoggleSolver(String[] dictionary){
+        int length = dictionary.length;
+        for(int i =0; i< length; i++){
+            put(dictionary[i],1);
+        }
+    }
+    public Iterable<String> getAllValidWords(BoggleBoard board){
+        int row = board.rows();
+        int column = board.cols();
+        TrieST<Integer> q = new TrieST<Integer>();
+		inPath = new boolean[row][column];
+        for( int i=0;i<row;i++){
+            for(int j =0; j<column;j++){
+                String pre = "" + board.getLetter(i,j);
+				inPath[i][j] = true;
+                getWords(root.next[(board.getLetter(i,j)-65)],board,i,j,q,pre);
+				inPath[i][j] = false;
+            }
+        }
+
+        return q.keys();
+        
+    }
+	private Integer get(String key){
+		Node x = get(root,key,0);
+		if(x == null) return null;
+        return (Integer)x.val;
+	}
+	private Node get(Node x, String key, int d){
+		if(x == null) return null;
+		if(d == key.length()) return x;
+		char c = key.charAt(d);
+		return get(x.next[c-65],key,d+1);
+	}
+    private void getWords(Node x,BoggleBoard board,int row, int column,TrieST<Integer> q, String pre){
+        if(x == null) return;
+        if(board.getLetter(row,column)== 'Q' && pre.charAt(pre.length()-1) == 'Q'){
+            getWords(x.next['U'-65],board,row,column,q,pre+'U');
+            return;
+        }
+        if(x.val != null) {
+			if(pre.length() >2){
+			    q.put(pre,1);
+			}
+		}
+        if(row-1>=0 && !inPath[row-1][column]){
+            inPath[row-1][column] = true;
+            getWords(x.next[board.getLetter(row-1,column)-65],board,row-1,column,q,pre+board.getLetter(row-1,column));
+            inPath[row-1][column] = false;
+        }
+        if(row+1< board.rows() && !inPath[row+1][column]){
+            inPath[row+1][column] = true;
+            getWords(x.next[board.getLetter(row+1,column)-65],board,row+1,column,q,pre+board.getLetter(row+1,column));
+            inPath[row+1][column] = false;
+        }
+        if(column-1>=0 && !inPath[row][column-1]){
+            inPath[row][column-1] = true;
+            getWords(x.next[board.getLetter(row,column-1)-65],board,row,column-1,q,pre+board.getLetter(row,column-1));
+            inPath[row][column-1] = false;
+        }
+        if(column+1<board.cols() && !inPath[row][column+1]){
+            inPath[row][column+1] = true;
+            getWords(x.next[board.getLetter(row,column+1)-65],board,row,column+1,q,pre+board.getLetter(row,column+1));
+            inPath[row][column+1] = false;
+        }
+        if(row-1>=0 && column+1 < board.cols() && !inPath[row-1][column+1]){
+            inPath[row-1][column+1] = true;
+            getWords(x.next[board.getLetter(row-1,column+1)-65],board,row-1,column+1,q,pre+board.getLetter(row-1,column+1));
+            inPath[row-1][column+1] = false;
+        }
+        if(row-1>=0 && column-1>=0 && !inPath[row-1][column-1]){
+            inPath[row-1][column-1] = true;
+            getWords(x.next[board.getLetter(row-1,column-1)-65],board,row-1,column-1,q,pre+board.getLetter(row-1,column-1));
+            inPath[row-1][column-1] = false;
+        }
+        if(row+1 < board.rows() && column+1< board.cols() && !inPath[row+1][column+1]){
+            inPath[row+1][column+1] = true;
+            getWords(x.next[board.getLetter(row+1,column+1)-65],board,row+1,column+1,q,pre+board.getLetter(row+1,column+1));
+            inPath[row+1][column+1] = false;
+        }
+        if(row+1 < board.rows() && column-1 >= 0 && !inPath[row+1][column-1]){
+            inPath[row+1][column-1] = true;
+            getWords(x.next[board.getLetter(row+1,column-1)-65],board,row+1,column-1,q,pre+board.getLetter(row+1,column-1));
+            inPath[row+1][column-1] = false;
+        }
+        
+    }
+    
+    
+    public int scoreOf(String word ){
+		  Integer isExisted = get(word);
+		  if( isExisted == null){
+			  return 0;
+		  }
+          int length = word.length();
+          if(length<3){
+              return 0;
+          }
+          else if( length <5){
+              return 1;
+          }
+          else if( length <6){
+              return 2;
+          }
+          else if( length < 7){
+              return 3;
+          }
+          else if(length < 8){
+              return 5;
+          }
+          else{
+              return 11;
+          }
+    }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+    In in = new In(args[0]);
+    String[] dictionary = in.readAllStrings();
+    BoggleSolver solver = new BoggleSolver(dictionary);
+    BoggleBoard board = new BoggleBoard(args[1]);
+    int score = 0;
+    for (String word : solver.getAllValidWords(board)) {
+        StdOut.println(word);
+        score += solver.scoreOf(word);
+    }
+    StdOut.println("Score = " + score);
+        // TODO code application logic here
+    }
+    
+}

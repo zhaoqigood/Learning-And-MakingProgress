@@ -1,0 +1,203 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import edu.princeton.cs.algs4.FlowNetwork;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.FlowEdge;
+import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.FordFulkerson;
+import edu.princeton.cs.algs4.In;
+import java.lang.Math;
+import java.lang.IllegalArgumentException;
+import java.util.HashMap;
+import java.util.LinkedList;
+/**
+ *
+ * @author zhaoq
+ */
+public class BaseballElimination {
+    private String[] names;
+    private HashMap<String,Integer> teams = new HashMap<String,Integer>();
+    private int[] wins;
+    private int[] losses;
+    private int[] remains;
+    private int[][] against;
+    private boolean[] marked;
+    private FlowEdge[] edgeTo;
+    private double value;
+    private Queue<Integer> certification;
+    public BaseballElimination(String filename){
+		In in = new In(filename);
+        String[] lines;
+        String line = in.readLine();
+          int number = Integer.parseInt(line);
+          names = new String[number];
+          wins = new int[number];
+          losses = new int[number];
+          remains = new int[number];
+          against = new int[number][number];
+          for(int i = 0; i<number ; i++){
+              if(in.hasNextLine()){
+                  line = in.readLine();
+                  String[] elements1 = line.split(" ");
+				  int length1 = elements1.length;
+				  String[] elements = new String[4+number];
+				  int t = 0;
+				  for(int k = 0; k< length1; k++){
+					  if(elements1[k].length()>0){
+						  elements[t++] = elements1[k];
+					  }
+                  }
+                  teams.put(elements[0], i);
+                  names[i] = elements[0];
+                  wins[i] = Integer.parseInt(elements[1]);
+                  losses[i] = Integer.parseInt(elements[2]);
+                  remains[i] = Integer.parseInt(elements[3]);
+                  for( int j = 0; j < number ;j++){
+                      against[i][j] = Integer.parseInt(elements[4+j]);
+                  }
+              }
+		  }
+		  in.close();
+    }
+		  
+      
+     
+    
+    public int numberOfTeams(){
+        return names.length;
+    }
+    public Iterable<String> teams(){
+        LinkedList<String> list = new LinkedList<String>();
+        int length = names.length;
+        for(int i = 0; i< length; i++){
+            list.add(names[i]);
+        }
+        return list;
+    }
+    public int wins(String team){
+
+        if(teams.containsKey(team)){
+            int index = (int)teams.get(team);
+            return wins[index];
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
+    }
+    public int losses(String team){
+        if(teams.containsKey(team)){
+            int index = (int)teams.get(team);
+            return losses[index];
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
+        
+    }
+    public int remaining(String team){
+         if(teams.containsKey(team)){
+            int index = (int)teams.get(team);
+           return remains[index];
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
+        
+    }
+    public int against(String team1, String team2){
+		if(teams.containsKey(team1)&& teams.containsKey(team2)){
+            int index1 = (int)teams.get(team1);
+            int index2 = (int)teams.get(team2);
+            return against[index1][index2];
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
+    
+    }
+    public boolean isEliminated(String team){
+		int index;
+		if(teams.containsKey(team)){
+           index = (int)teams.get(team);
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
+		certification = new Queue<Integer>();
+        int number = names.length;
+        int V = number + 2 + number*number;
+        FlowNetwork graph = new FlowNetwork(V);
+		value = 0;
+        for(int i = 0; i< number; i++ ){
+            for(int j = i; j<number ; j++){
+                if( (i!=index) && (j!=index) ){
+					value = value + against[i][j];
+                    FlowEdge e = new FlowEdge(V-2,(number+i*number+j),(double)against[i][j]);
+                    FlowEdge e1 = new FlowEdge((number+i*number+j),i,Double.MAX_VALUE);
+                    FlowEdge e2 = new FlowEdge((number+i*number+j),j,Double.MAX_VALUE);
+                    graph.addEdge(e);
+                    graph.addEdge(e1);
+                    graph.addEdge(e2);
+                }
+            }
+            if( i != index){
+				if(wins[index]+remains[index]-wins[i] >= 0){
+                    FlowEdge e3 = new FlowEdge(i,V-1,(double)(wins[index]+remains[index]-wins[i]));
+                    graph.addEdge(e3);
+                }
+				else{
+                    certification.enqueue(i);
+					return true;
+                }
+            }        
+        }
+        FordFulkerson fordFulkerson = new FordFulkerson( graph, V-2, V-1 );
+        if( value == fordFulkerson.value()){
+			return false;
+        }
+		else{
+			for( int i = 0; i< number; i++){
+				if( fordFulkerson.inCut(i) ){
+					certification.enqueue(i);
+                }
+			}
+            return true;
+		}
+        
+    }
+    public Iterable<String> certificateOfElimination(String team){
+        Queue<String> queue = new Queue<String>();
+        if(isEliminated(team)){   
+            for(int point: certification){
+                queue.enqueue(names[point]);   
+            }
+			return queue;
+        }
+		else{
+			return null;
+		}
+       
+    }
+    /** @param args the command line arguments
+     */
+    public static void main(String[] args) {
+            BaseballElimination division = new BaseballElimination(args[0]);
+        for (String team : division.teams()) {
+        if (division.isEliminated(team)) {
+            StdOut.print(team + " is eliminated by the subset R = { ");
+            for (String t : division.certificateOfElimination(team)) {
+                StdOut.print(t + " ");
+            }
+            StdOut.println("}");
+        }
+        else {
+            StdOut.println(team + " is not eliminated");
+        }
+    }
+        // TODO code application logic here
+    }
+    
+}
