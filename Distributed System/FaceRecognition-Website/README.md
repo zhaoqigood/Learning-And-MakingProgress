@@ -14,6 +14,9 @@ Work Specialization:
      Qi Zhao:     Building part of the backend and frontend of this website, including the AWS lambda function, DynamoDB, static webpage content(html) and dynamic function(javascript). 
                   Implement the Face-analysis function in the frontend.
 
-
+Files Specification:
+There are mainly two files in this project:
+     face_recognition.py : this is a python file that contains the backEnd code.
+     index.html: this is a html file that contains the frontEnd code.
 The web URL is:
  http://machine-learning-website.s3-website-us-east-1.amazonaws.com
