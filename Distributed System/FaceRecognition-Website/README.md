@@ -11,8 +11,9 @@ Work Specialization:
      Kebo Duan:   Building the backend of this website, including the AWS lambda function, S3 bucket, DynamoDB, API Gateway.
                   Implement the Face-name pair storage and face recognition in the backend.
                   
-     Qi Zhao:     Building the frontend of this website, including the html static content and javascript dynamic function. 
+     Qi Zhao:     Building part of the backend and frontend of this website, including the AWS lambda function, DynamoDB, static webpage content(html) and dynamic function(javascript). 
                   Implement the Face-analysis function in the frontend.
+
 
 The web URL is:
  http://machine-learning-website.s3-website-us-east-1.amazonaws.com
