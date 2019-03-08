@@ -12,5 +12,5 @@ a.xlsx, adult.csv, attributes.csv: These files contains the data used to train a
 plot...: These files record the data used to plot the figures in the final report.
 
 
-If you want to know more about this project, please read the "Project3.pdf". This files provide detailed information 
+If you want to know more about this project, please read the "Project3.pdf". This file provide detailed information 
 about this project.
