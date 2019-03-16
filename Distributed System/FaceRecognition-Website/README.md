@@ -24,3 +24,5 @@ Files Specification:
      
 The web URL is:
  http://machine-learning-website.s3-website-us-east-1.amazonaws.com
+ 
+Face recognition functionality is invalid because we have shut down the relevant AWS service.
